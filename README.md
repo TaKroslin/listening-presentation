@@ -29,6 +29,15 @@
 - **可选视频**：给链接或文件就下载、转 H.264、裁黑边、内嵌到最后一页。
 - **可复现**：一条命令从 `deck.json` 到成片。
 
+## 安装到 DSH
+
+```bash
+git clone https://github.com/TaKroslin/listening-presentation.git
+cp -R listening-presentation ~/.dsh/skills/
+```
+
+或直接把本目录（含 `SKILL.md`）放进 `~/.dsh/skills/listening-presentation/`，DSH 会在下一步把它加入技能目录。
+
 ## 快速开始
 
 ### 1. 依赖
