@@ -1,0 +1,96 @@
+{
+  "title": "Anthropic’s Two-Trillion-Dollar Debut Raises Uncomfortable Questions",
+  "band_text": "Latest News",
+  "cover_image": "img/cover_dario.jpg",
+  "cover_credit": "Photo: TechCrunch / CC BY 2.0 (Wikimedia Commons)",
+  "audio": "audio.mp3",
+  "audio_icon": "../../assets/audio-icon.png",
+  "body_size": 54,
+  "pages": [
+    {
+      "text": "The artificial intelligence industry has just witnessed one of its most extraordinary moments. Anthropic, the company behind Claude, made its stock market debut, raising billions of dollars and reaching a valuation of nearly two trillion dollars at its peak. The company’s IPO ceremony was described by some observers as strangely unsettling, almost like a scene from a horror movie.",
+      "targets": [
+        {
+          "word": "extraordinary",
+          "gloss": "非凡的"
+        },
+        {
+          "word": "stock market debut",
+          "gloss": "上市首秀"
+        },
+        {
+          "word": "billions of dollars",
+          "gloss": "数十亿美元"
+        },
+        {
+          "word": "at its peak",
+          "gloss": "在顶峰"
+        },
+        {
+          "word": "unsettling",
+          "gloss": "令人不安的"
+        }
+      ],
+      "image": "img/nasdaq.jpg",
+      "credit": "Photo: Wikimedia Commons / CC BY 2.0"
+    },
+    {
+      "text": "Beneath the smiles and flashing cameras, the spectacle seemed to symbolize something disturbing: the growing power of machines and the enormous wealth being concentrated in the hands of a few. Anthropic has also attracted criticism for its increasingly restrictive policies toward Chinese companies, reflecting the intensifying technological rivalry between Washington and Beijing. Critics argue that its commitment to AI safety may also serve broader geopolitical interests.",
+      "targets": [
+        {
+          "word": "flashing cameras",
+          "gloss": "闪光灯"
+        },
+        {
+          "word": "concentrated",
+          "gloss": "集中的"
+        },
+        {
+          "word": "criticism",
+          "gloss": "批评"
+        },
+        {
+          "word": "restrictive",
+          "gloss": "限制性的"
+        },
+        {
+          "word": "technological rivalry",
+          "gloss": "技术竞争"
+        }
+      ],
+      "image": "img/capitol.jpg",
+      "credit": "Photo: Wikimedia Commons / public domain"
+    },
+    {
+      "text": "Meanwhile, AI’s growing involvement in military operations has raised serious concerns about accountability and human control. When powerful technologies become instruments of warfare, the consequences may extend far beyond the battlefield. Anthropic may be celebrated as a technological pioneer today. But its soaring valuation, political influence, and controversial ambitions raise an uncomfortable question: Are we witnessing the future of innovation, or the beginning of a dangerous illusion?",
+      "targets": [
+        {
+          "word": "military operations",
+          "gloss": "军事行动"
+        },
+        {
+          "word": "human control",
+          "gloss": "人类控制"
+        },
+        {
+          "word": "instruments of warfare",
+          "gloss": "战争工具"
+        },
+        {
+          "word": "battlefield",
+          "gloss": "战场"
+        },
+        {
+          "word": "pioneer",
+          "gloss": "先驱"
+        },
+        {
+          "word": "illusion",
+          "gloss": "幻觉"
+        }
+      ],
+      "image": "img/drone.jpg",
+      "credit": "Photo: U.S. Air Force / public domain"
+    }
+  ]
+}
