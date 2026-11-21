@@ -10,7 +10,7 @@
 
 ## 效果
 
-| 封面 | 听力页（词被遮住） | 答案页（点击后逐个露出） |
+| 封面 | 听力页（词被遮住） | 答案（全露出示意） |
 |---|---|---|
 | ![cover](docs/screenshots/cover.jpg) | ![listening](docs/screenshots/listening.jpg) | ![revealed](docs/screenshots/revealed.jpg) |
 
