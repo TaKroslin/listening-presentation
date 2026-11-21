@@ -4,7 +4,7 @@
 
 封面 + 3 页左右听力（听力词/短语被蓝色块遮住）+ 3 页答案（点一次消失一个色块）+ 可选视频页；免费男声 TTS 自动配音，音频、配图、动画全部内嵌进一个 16:9 的 `.pptx`。
 
-这是给 [DeepSeek Harness](https://github.com/deepseek-ai) 的技能（skill），也可以脱离 DSH 单独当脚本用。
+这是给 DeepSeek Harness 的技能（skill），也可以脱离 DSH 单独当脚本用。
 
 ---
 
@@ -35,7 +35,7 @@
 
 - Python 3.10+，`pip install -r requirements.txt`
 - `ffmpeg` / `ffprobe`（音频拼接、视频转码）
-- [officecli](https://officecli.dev)（渲染校准、`validate`、逐页截图；没有也能出片，只是遮罩用近似坐标）
+- `officecli`（渲染校准、`validate`、逐页截图；没有也能出片，只是遮罩用近似坐标）
 
 ```bash
 python3 -m venv .venv
@@ -168,4 +168,4 @@ python scripts/make_audio.py \
 
 - 版式来源：`时文听力` 系列课件的「Latest News」模板
 - TTS：[edge-tts](https://github.com/rany2/edge-tts)
-- 渲染与校验：[officecli](https://officecli.dev)
+- 渲染与校验：officecli
