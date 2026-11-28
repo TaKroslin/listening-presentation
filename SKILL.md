@@ -74,7 +74,7 @@ description: 英语时文听力课件（Listening - Presentation）：把一篇�
 2. **分页**：按「铺满一页」来分，不要一段一页。250 词左右的文章 ≈ **3 页**，每页 3–4 句 / 70–90 词；页面纵向要占到 8–9in，不要留半页空白。
 3. **选词**：按上面的规则挑 4–5 个/页，记录 English + 中文。
 4. **配图**（用户没给时）：Wikimedia Commons API 搜 CC 图，下载后按 5.95×6.15 居中裁切；封面图另按 3:2 裁。来源写进 spec 的 `credit` 与 `cover_credit`。
-5. **音频**：按第 0 步用户确认的音色/语速跑 `scripts/make_audio.py`（默认 `en-US-AndrewNeural` / `+3%`），段间 0.8s / 句间 0.45s，最后 loudnorm 到 -16 LUFS。
+5. **音频**：按第 0 步用户确认的音色/语速跑 `scripts/make_audio.py`（默认 `en-US-AndrewNeural` / `+3%`），段间 0.8s / 句间 0.45s，最后 loudnorm 到 -16 LUFS。把最终音色/语速写进 `CREDITS.md`，方便复现。
 6. **写 spec**（JSON，见 `references/spec.md`），用一条龙脚本生成（先无遮罩，渲染，按红色词实测遮罩，再出片）：
    ```bash
    PYTHON=<带 python-pptx/Pillow/numpy 的 python> \
