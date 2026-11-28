@@ -469,7 +469,7 @@ def add_credit(slide, text, color=RGBColor(0x8A, 0x81, 0x72), size=8, x=0.62, y=
 
 # ---------------------------------------------------------------- audio / timing
 def add_audio(slide, icon_path, audio_path, x, y, size_in, num_slides):
-    """Embed audio that starts in the click sequence (first click on the slide)."""
+    """Embed audio that starts when the speaker icon is clicked (单击时)."""
     pkg = slide.part.package
     media_part = MediaPart.new(pkg, Video.from_path_or_file_like(audio_path, "audio/mpeg"))
     media_rid = slide.part.relate_to(media_part, RT.MEDIA)
@@ -506,7 +506,7 @@ def add_audio(slide, icon_path, audio_path, x, y, size_in, num_slides):
         '<p:tgtEl><p:spTgt spid="%d"/></p:tgtEl></p:cMediaNode></p:audio>'
         '<p:seq concurrent="1" nextAc="seek">'
         '<p:cTn id="3" restart="whenNotActive" fill="hold" evtFilter="cancelBubble" nodeType="interactiveSeq">'
-        '<p:stCondLst><p:cond evt="onClick" delay="0"><p:tgtEl><p:sldTgt/></p:tgtEl></p:cond></p:stCondLst>'
+        '<p:stCondLst><p:cond evt="onClick" delay="0"><p:tgtEl><p:spTgt spid="%d"/></p:tgtEl></p:cond></p:stCondLst>'
         '<p:endSync evt="end" delay="0"><p:rtn val="all"/></p:endSync>'
         "<p:childTnLst><p:par><p:cTn id=\"4\" fill=\"hold\"><p:stCondLst><p:cond delay=\"0\"/></p:stCondLst>"
         "<p:childTnLst><p:par><p:cTn id=\"5\" fill=\"hold\"><p:stCondLst><p:cond delay=\"0\"/></p:stCondLst>"
@@ -516,9 +516,9 @@ def add_audio(slide, icon_path, audio_path, x, y, size_in, num_slides):
         '<p:tgtEl><p:spTgt spid="%d"/></p:tgtEl></p:cBhvr></p:cmd>'
         "</p:childTnLst></p:cTn></p:par></p:childTnLst></p:cTn></p:par></p:childTnLst></p:cTn></p:par>"
         "</p:childTnLst></p:cTn>"
-        '<p:nextCondLst><p:cond evt="onClick" delay="0"><p:tgtEl><p:sldTgt/></p:tgtEl></p:cond></p:nextCondLst>'
+        '<p:nextCondLst><p:cond evt="onClick" delay="0"><p:tgtEl><p:spTgt spid="%d"/></p:tgtEl></p:cond></p:nextCondLst>'
         "</p:seq></p:childTnLst></p:cTn></p:par></p:tnLst></p:timing>"
-        % (nsdecls("p", "a", "r"), num_slides, sid, sid)
+        % (nsdecls("p", "a", "r"), num_slides, sid, sid, sid, sid)
     )
     slide._element.append(parse_xml(timing))
     return sid

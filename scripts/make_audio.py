@@ -27,6 +27,40 @@ import wave
 import edge_tts
 
 
+
+# Curated classroom voices (all free, all edge-tts).
+# key, voice id, gender, accent, character
+VOICES = [
+    ("A", "en-US-AndrewNeural",               "男", "美音", "温暖、自然，最像真人播客（默认）"),
+    ("B", "en-US-ChristopherNeural",          "男", "美音", "新闻主播，权威、字正腔圆"),
+    ("C", "en-US-GuyNeural",                  "男", "美音", "新闻/小说，情绪饱满"),
+    ("D", "en-US-BrianNeural",                "男", "美音", "随和、口语化"),
+    ("E", "en-GB-RyanNeural",                 "男", "英音", "友好、清晰"),
+    ("F", "en-GB-ThomasNeural",               "男", "英音", "冷静、标准 RP"),
+    ("G", "en-AU-WilliamMultilingualNeural",  "男", "澳音", "澳洲口音，轻松"),
+    ("H", "en-CA-LiamNeural",                 "男", "加拿大音", "北美口音，平和"),
+    ("I", "en-IN-PrabhatNeural",              "男", "印度音", "印度口音，清晰"),
+    ("J", "en-US-AriaNeural",                 "女", "美音", "新闻主播，积极自信"),
+    ("K", "en-US-JennyNeural",                "女", "美音", "亲切、耐心"),
+    ("L", "en-US-AvaNeural",                  "女", "美音", "生动、有表现力"),
+    ("M", "en-US-EmmaNeural",                 "女", "美音", "明亮、口语化"),
+    ("N", "en-GB-SoniaNeural",                "女", "英音", "英音新闻，端庄"),
+    ("O", "en-GB-LibbyNeural",                "女", "英音", "明亮、年轻"),
+    ("P", "en-AU-NatashaNeural",              "女", "澳音", "澳洲口音，友善"),
+    ("Q", "en-IN-NeerjaNeural",               "女", "印度音", "印度口音，清楚"),
+]
+
+
+def print_voices():
+    print("可用配音（edge-tts，免费）：")
+    print("key  voice-id                         性别  口音      特点")
+    for key, vid, gender, accent, desc in VOICES:
+        print("%-4s %-32s %-4s  %-8s  %s" % (key, vid, gender, accent, desc))
+    print()
+    print("默认：A（en-US-AndrewNeural），语速 +3%。")
+    print("也可以直接用 --voice <任意 edge-tts 音色 id>。")
+
+
 def synth(text, voice, rate, out_path, attempts=4):
     async def _run():
         comm = edge_tts.Communicate(text, voice, rate=rate)
@@ -66,14 +100,21 @@ def silence_wav(path, seconds, sr=44100):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--text", required=True, help="UTF-8 text file, paragraphs separated by blank lines")
-    ap.add_argument("--out", required=True)
+    ap.add_argument("--text", help="UTF-8 text file, paragraphs separated by blank lines")
+    ap.add_argument("--list-voices", action="store_true", help="print the curated voice menu and exit")
+    ap.add_argument("--out")
     ap.add_argument("--voice", default="en-US-AndrewNeural")
     ap.add_argument("--rate", default="-5%", help="e.g. -8%% for slower dictation pace")
     ap.add_argument("--note", default="", help="optional spoken lead-in, e.g. 'Listen to the news report.'")
     ap.add_argument("--sentence-gap", type=float, default=0.45)
     ap.add_argument("--paragraph-gap", type=float, default=1.0)
     args = ap.parse_args()
+
+    if args.list_voices:
+        print_voices()
+        return
+    if not args.text or not args.out:
+        raise SystemExit("--text and --out are required (or use --list-voices)")
 
     with open(args.text, encoding="utf-8") as f:
         raw = f.read().strip()

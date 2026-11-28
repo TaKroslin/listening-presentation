@@ -18,7 +18,7 @@
 - 正文：Times New Roman Bold 54pt，开头几行通栏，之后收窄绕开右侧图片。
 - 听力词：红色 `#FF0000`，被主题蓝 `#4F81BD` 矩形遮住；**单词和 2–3 词短语混搭**。
 - 答案：与听力页逐页同版式，每个色块一条独立「点击消失」动画。
-- 音频：`edge-tts` 免费男声（默认 `en-US-AndrewNeural`，`+3%`），段间留 0.8s，开始条件为**在单击序列中**（翻页后点一下任意位置就播，不用点喇叭图标）。
+- 音频：`edge-tts` 免费男声（默认 `en-US-AndrewNeural`，`+3%`），段间留 0.8s，开始条件为**单击时**（点喇叭图标播放）。
 
 ## 特性
 
@@ -80,6 +80,33 @@ python scripts/make_audio.py \
   --note "Listen to the news report." --paragraph-gap 0.8
 ```
 
+### 配音选项
+
+所有音色都来自 edge-tts，免费、无需 key。**开工前会先让你选**（声音 + 语速），不选就按默认 A / `+3%`。
+
+| key | 音色 | 性别 | 口音 | 特点 |
+|---|---|---|---|---|
+| A | `en-US-AndrewNeural` | 男 | 美音 | 温暖自然（默认） |
+| B | `en-US-ChristopherNeural` | 男 | 美音 | 新闻主播 |
+| C | `en-US-GuyNeural` | 男 | 美音 | 情绪饱满 |
+| E | `en-GB-RyanNeural` | 男 | 英音 | 友好清晰 |
+| G | `en-AU-WilliamMultilingualNeural` | 男 | 澳音 | 轻松 |
+| I | `en-IN-PrabhatNeural` | 男 | 印度音 | 清晰 |
+| J | `en-US-AriaNeural` | 女 | 美音 | 新闻、积极 |
+| K | `en-US-JennyNeural` | 女 | 美音 | 亲切 |
+| L | `en-US-AvaNeural` | 女 | 美音 | 生动 |
+| N | `en-GB-SoniaNeural` | 女 | 英音 | 端庄 |
+| P | `en-AU-NatashaNeural` | 女 | 澳音 | 友善 |
+| Q | `en-IN-NeerjaNeural` | 女 | 印度音 | 清楚 |
+
+完整 17 个（含 Brian / Thomas / Liam / Libby / Emma）随时可查：
+
+```bash
+python scripts/make_audio.py --list-voices
+```
+
+语速：`-8%` 慢 / `-3%` 稍慢 / `+0%` 正常 / `+3%` 稍快（默认）/ `+8%` 快。
+
 ## 输入：`deck.json`
 
 ```json
@@ -123,7 +150,7 @@ python scripts/make_audio.py \
 | 听力词 | `#FF0000` |
 | 遮罩 | `#4F81BD`，无边框 |
 | 图片 | 右侧约 30%，近方形裁切，白边 + 细灰线 |
-| 音频开始 | 在单击序列中（`<p:sldTgt/>`） |
+| 音频开始 | 单击时（点喇叭图标，`<p:spTgt/>`） |
 | 答案动画 | 每色块一个 `clickEffect`，`presetID=2 / exit / subtype=4`，500ms |
 
 ## 目录结构

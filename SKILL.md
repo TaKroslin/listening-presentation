@@ -12,11 +12,11 @@ description: 英语时文听力课件（Listening - Presentation）：把一篇�
 | 页 | 内容 |
 |---|---|
 | 1 | 封面：固定「Latest News」蓝色叠纸版式 + 自拟标题 + 一张新闻图 |
-| 2…n+1 | 听力页：文章正文，每页 3–4 句（把页面铺满，别一段一页）；听力词被蓝色块遮住；第 1 页放音频（开始条件＝**在单击序列中**） |
+| 2…n+1 | 听力页：文章正文，每页 3–4 句（把页面铺满，别一段一页）；听力词被蓝色块遮住；第 1 页放音频（开始条件＝**单击时**，点喇叭图标播放） |
 | n+2…2n+1 | 答案页：与听力页**逐页同版式**，遮罩加「点击消失」退出动画 |
 | 最后 | 视频页：全幅内嵌视频（仅当用户提供了视频；没有就不加） |
 
-音频只有一条，嵌在**第一张听力页**，`numSld` 覆盖全部听力页。开始条件设为 **「在单击序列中」**：翻到该页后第一次点击任意位置就开始播（不需要点喇叭图标），一次连续播放到底。
+音频只有一条，嵌在**第一张听力页**，`numSld` 覆盖全部听力页。开始条件设为 **「单击时」**：点击喇叭图标开始播放，一次连续播放到底。
 
 ## 二、设计规范（从 `时文听力` 示例提取，已按像素校准）
 
@@ -40,11 +40,41 @@ description: 英语时文听力课件（Listening - Presentation）：把一篇�
 
 ## 三、工作流
 
+0. **先确认配音（开工前必做）**：用 `ask_user_question`（没有该工具就用一条消息）问清楚两件事，用户确认后再动文章：
+
+   **① 声音**（默认 A）：
+
+   | key | 音色 | 口音 | 特点 |
+   |---|---|---|---|
+   | A | `en-US-AndrewNeural` 男 | 美音 | 温暖自然，最像真人播客（默认） |
+   | B | `en-US-ChristopherNeural` 男 | 美音 | 新闻主播，权威 |
+   | C | `en-US-GuyNeural` 男 | 美音 | 情绪饱满 |
+   | D | `en-US-BrianNeural` 男 | 美音 | 随和口语 |
+   | E | `en-GB-RyanNeural` 男 | 英音 | 友好清晰 |
+   | F | `en-GB-ThomasNeural` 男 | 英音 | 标准 RP |
+   | G | `en-AU-WilliamMultilingualNeural` 男 | 澳音 | 轻松 |
+   | H | `en-CA-LiamNeural` 男 | 加拿大音 | 平和 |
+   | I | `en-IN-PrabhatNeural` 男 | 印度音 | 清晰 |
+   | J | `en-US-AriaNeural` 女 | 美音 | 新闻，积极 |
+   | K | `en-US-JennyNeural` 女 | 美音 | 亲切耐心 |
+   | L | `en-US-AvaNeural` 女 | 美音 | 生动 |
+   | M | `en-US-EmmaNeural` 女 | 美音 | 明亮口语 |
+   | N | `en-GB-SoniaNeural` 女 | 英音 | 端庄 |
+   | O | `en-GB-LibbyNeural` 女 | 英音 | 明亮年轻 |
+   | P | `en-AU-NatashaNeural` 女 | 澳音 | 友善 |
+   | Q | `en-IN-NeerjaNeural` 女 | 印度音 | 清楚 |
+
+   问题只给常用 4–6 个（A/B/E/J/N + 「其他音色见列表」），不要把 17 行全塞给用户。
+   **② 语速**：`-8%` 慢 / `-3%` 稍慢 / `+0%` 正常 / `+3%` 稍快（默认）/ `+8%` 快。
+
+   用户已经指定音色或语速时跳过提问。完整列表随时可跑：
+   `python scripts/make_audio.py --list-voices`
+
 1. **读文章**，拟一个新闻标题（≤ 70 字符，能压在封面 3 行内）。
 2. **分页**：按「铺满一页」来分，不要一段一页。250 词左右的文章 ≈ **3 页**，每页 3–4 句 / 70–90 词；页面纵向要占到 8–9in，不要留半页空白。
 3. **选词**：按上面的规则挑 4–5 个/页，记录 English + 中文。
 4. **配图**（用户没给时）：Wikimedia Commons API 搜 CC 图，下载后按 5.95×6.15 居中裁切；封面图另按 3:2 裁。来源写进 spec 的 `credit` 与 `cover_credit`。
-5. **音频**：`scripts/make_audio.py`，默认 `en-US-AndrewNeural`、`rate=+3%`（正常新闻语速，不要拖慢），段间 0.8s / 句间 0.45s，最后 loudnorm 到 -16 LUFS。
+5. **音频**：按第 0 步用户确认的音色/语速跑 `scripts/make_audio.py`（默认 `en-US-AndrewNeural` / `+3%`），段间 0.8s / 句间 0.45s，最后 loudnorm 到 -16 LUFS。
 6. **写 spec**（JSON，见 `references/spec.md`），用一条龙脚本生成（先无遮罩，渲染，按红色词实测遮罩，再出片）：
    ```bash
    PYTHON=<带 python-pptx/Pillow/numpy 的 python> \
@@ -142,7 +172,7 @@ PY
 - [ ] 封面标题 3 行内、不压图；图片有署名
 - [ ] 3 页左右把文章铺满（每页 3–4 句、70–90 词），文字不压图、不溢出纸张
 - [ ] 每页 5–7 个词，遮罩完全盖住单词、不盖标点；渲染图里看不到红色
-- [ ] 第 1 张听力页有喇叭图标；`ppt/media` 里有 mp3；`numSld` = 听力页数；timing 的 onClick 目标是 `<p:sldTgt/>`（单击序列），不是 `spTgt`
+- [ ] 第 1 张听力页有喇叭图标；`ppt/media` 里有 mp3；`numSld` = 听力页数；timing 的 onClick 目标是 `<p:spTgt spid=.../>`（单击时），不是 `sldTgt`
 - [ ] 答案页与听力页逐页同版式；每页遮罩数量与听力页一致；点击一次只消失一个（cTn id 唯一 + bldLst 齐全）
 - [ ] `officecli validate` 0 errors；`view issues` 只允许「遮罩盖住文字」这一类 overlap（这是设计本身），不能有 overflow / 越界
 - [ ] 有视频才加视频页；视频用 `add_movie` 内嵌，不写外链
