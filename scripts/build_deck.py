@@ -293,6 +293,27 @@ def add_text_block(slide, page, base_size, mask_override=None):
 
     line_h = size * LINE_FACTOR / 72.0
     lines, space_w = wrap_around(atoms, size, line_h, FULL_W, TEXT_W, TEXT_Y, IMG_TOP)
+
+    # If the page would look empty, grow the type a little (up to base+6pt)
+    # so the article fills the sheet. Never grow a page that had to shrink.
+    if size == base_size:
+        while (size + 2 <= min(62, base_size + 6)
+               and (len(lines) * line_h / TEXT_H) < 0.88):
+            cand = size + 2
+            c_atoms = build_atoms(page["text"], page.get("targets", []), cand, inline)
+            c_lh = cand * LINE_FACTOR / 72.0
+            c_lines, c_sp = wrap_around(c_atoms, cand, c_lh, FULL_W, TEXT_W, TEXT_Y, IMG_TOP)
+            if len(c_lines) * c_lh <= TEXT_H:
+                size, atoms, line_h, lines, space_w = cand, c_atoms, c_lh, c_lines, c_sp
+            else:
+                break
+
+    page["_fill"] = {
+        "size": size,
+        "lines": len(lines),
+        "height": round(len(lines) * line_h, 2),
+        "fill": round(len(lines) * line_h / TEXT_H, 3),
+    }
     content_w = FULL_W
     tb = slide.shapes.add_textbox(Inches(TEXT_X), Inches(TEXT_Y), Inches(content_w + 0.2), Inches(TEXT_H))
     tf = tb.text_frame
@@ -752,6 +773,8 @@ def main():
     ap.add_argument("--out", required=True)
     ap.add_argument("--bg", default=None)
     ap.add_argument("--masks", default=None, help="calibrated mask boxes JSON")
+    ap.add_argument("--min-fill", type=float, default=0.85,
+                    help="warn when a page fills less than this share of the text area")
     args = ap.parse_args()
 
     with open(args.spec, encoding="utf-8") as f:
@@ -805,6 +828,21 @@ def main():
         add_video_slide(prs, spec["video"], bg_path,
                         aspect=float(spec.get("video_aspect", 16 / 9)),
                         poster=spec.get("video_poster"))
+
+    print("page fill (text area %.2fin tall):" % TEXT_H)
+    under = []
+    for i, pg in enumerate(pages, 1):
+        f = pg.get("_fill")
+        if not f:
+            continue
+        flag = "  <-- too empty" if f["fill"] < args.min_fill else ""
+        print("  p%d: %dpt, %d lines, %.2fin, %d%%%s"
+              % (i, f["size"], f["lines"], f["height"], round(f["fill"] * 100), flag))
+        if f["fill"] < args.min_fill:
+            under.append(i)
+    if under:
+        print("WARNING: pages %s are under %.0f%% fill — move sentences or merge pages."
+              % (", ".join(map(str, under)), args.min_fill * 100))
 
     cp = prs.core_properties
     cp.title = spec["title"]

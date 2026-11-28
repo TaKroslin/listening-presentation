@@ -67,6 +67,8 @@ scripts/render.sh build/<slug>/out.pptx /tmp/<slug>-preview
 
 `render.sh` 会把文件复制成唯一临时名再渲染，因为 officecli 按路径缓存，直接重渲染同一路径会看到旧图。
 
+构建结束会打印每页 `fill%`（文字高度 / 9.75in 文本区）。目标 **88–98%**；低于 88% 会标 `too empty`，需要挪句子或合并页；`--min-fill` 可改阈值。
+
 ## 3.1 masks.json
 
 `make_deck.sh` 会先出无遮罩版并逐页渲染，`calibrate_masks.py` 扫描纯红色词块得到实测 bbox，写出：

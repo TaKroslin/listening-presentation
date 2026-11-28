@@ -71,7 +71,7 @@ description: 英语时文听力课件（Listening - Presentation）：把一篇�
    `python scripts/make_audio.py --list-voices`
 
 1. **读文章**，拟一个新闻标题（≤ 70 字符，能压在封面 3 行内）。
-2. **分页**：按「铺满一页」来分，不要一段一页。250 词左右的文章 ≈ **3 页**，每页 3–4 句 / 70–90 词；页面纵向要占到 8–9in，不要留半页空白。
+2. **分页＝排满**：不要一段一页，按「每一页都排满」来分。250 词左右的文章 ≈ **3 页**，每页 3–4 句 / 70–90 词；**每页文字高度要达到 8.6–9.6in（文本区的 88–98%）**，最后一页也一样，不要留半页空白。文字不够就把下一句挪过来/调大字号；太挤就挪走一句。
 3. **选词**：按上面的规则挑 4–5 个/页，记录 English + 中文。
 4. **配图**（用户没给时）：Wikimedia Commons API 搜 CC 图，下载后按 5.95×6.15 居中裁切；封面图另按 3:2 裁。来源写进 spec 的 `credit` 与 `cover_credit`。
 5. **音频**：按第 0 步用户确认的音色/语速跑 `scripts/make_audio.py`（默认 `en-US-AndrewNeural` / `+3%`），段间 0.8s / 句间 0.45s，最后 loudnorm 到 -16 LUFS。把最终音色/语速写进 `CREDITS.md`，方便复现。
@@ -81,14 +81,16 @@ description: 英语时文听力课件（Listening - Presentation）：把一篇�
      scripts/make_deck.sh build/<slug>/deck.json build/<slug>/<标题>.pptx
    ```
    只改文案、不换字体/字号时，也可以直接 `build_deck.py --spec ... --out ...` 用内置近似值。
-7. **校验**（不可跳过）：
+7. **看 fill 报告并回炉**：`build_deck.py` 会打印每页 `fill%`。任何一页低于 **88%**（日志里带 `too empty`）都要回去挪句子或合并页面，直到全部 ≥88%，再进入校验。
+
+8. **校验**（不可跳过）：
    ```bash
    officecli validate <pptx> --json          # 必须 0 errors
    officecli view <pptx> issues              # 溢出/格式问题
    scripts/render.sh <pptx> /tmp/preview      # 逐页 PNG（自动躲开 officecli 的路径缓存）
    ```
    逐页看图，重点查：遮罩漏红边、遮住标点、文字压图、字被裁、标题换行难看、图片白边。
-8. **交付**：PPTX + 独立 MP3 + 图片/音频来源清单。`present` 出去。
+9. **交付**：PPTX + 独立 MP3 + 图片/音频来源清单。`present` 出去。
 
 ## 四、音频
 
@@ -170,7 +172,7 @@ PY
 ## 九、验收清单
 
 - [ ] 封面标题 3 行内、不压图；图片有署名
-- [ ] 3 页左右把文章铺满（每页 3–4 句、70–90 词），文字不压图、不溢出纸张
+- [ ] 3 页左右把文章铺满（每页 3–4 句、70–90 词；构建日志每页 fill ≥88%，无 too empty），文字不压图、不溢出纸张
 - [ ] 每页 5–7 个词，遮罩完全盖住单词、不盖标点；渲染图里看不到红色
 - [ ] 第 1 张听力页有喇叭图标；`ppt/media` 里有 mp3；`numSld` = 听力页数；timing 的 onClick 目标是 `<p:spTgt spid=.../>`（单击时），不是 `sldTgt`
 - [ ] 答案页与听力页逐页同版式；每页遮罩数量与听力页一致；点击一次只消失一个（cTn id 唯一 + bldLst 齐全）
